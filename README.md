@@ -43,7 +43,8 @@ That's it — calls now flow through the proxy and land in `./logs`. Details bel
 └─────────────┘                                  └──────────────┘      │ Anthropic │
                                                         │              └───────────┘
                                                         ▼
-                                                  ./logs/*.json
+                                                  ./logs/[YYMMDD-HH]/*.json
+                                                  ./Logs/Tools/*.json
 ```
 
 There are **two sides** that are easy to confuse:
