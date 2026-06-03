@@ -1,0 +1,16 @@
+.deepfix/
+consultation-prompt.md
+agent-prompt.md
+implementation-prompt.md
+prompts/
+tasks/
+codebase.xml
+*.codebase.xml
+logs/
+logs.*/
+.DS_Store
+
+# Secrets: ignore ONLY the root .env (it holds API keys). The leading slash
+# anchors to the repo root — do NOT change this to a bare `.env`, or the
+# non-secret bundle files under models/*/.env get ignored too.
+/.env

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm-proxy
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm-config.yaml:/app/config.yaml
+      - ./custom_logger.py:/app/custom_logger.py
+      - ./logs:/app/logs
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # TZ is the standard var the OS/Python read; users set the friendlier
+      # TIMEZONE in .env (defaults to UTC).
+      - TZ=${TIMEZONE:-UTC}
+    command: [ "--config", "/app/config.yaml", "--port", "4000" ]
+    restart: always

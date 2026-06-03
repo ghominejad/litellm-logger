@@ -1,0 +1,43 @@
+litellm_settings:
+  # Logging is OFF by default. Uncomment the next line to enable logging
+  # callbacks: custom_logger.proxy_logger
+
+model_list:
+  # ── DeepSeek (via api.deepseek.com/anthropic) ──────────────────────────────
+  - model_name: deepseek-v4-pro
+    litellm_params:
+      model: anthropic/deepseek-v4-pro
+      api_base: https://api.deepseek.com/anthropic
+      # model: openai/deepseek-v4-pro
+      # api_base: https://api.deepseek.com
+      api_key: os.environ/DEEPSEEK_API_KEY
+      drop_params: true
+      # Strip invalid user identifiers before they hit DeepSeek
+      additional_drop_params:
+        - "metadata.user_id"
+        - "user"
+
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: anthropic/deepseek-v4-flash
+      api_base: https://api.deepseek.com/anthropic
+      # model: openai/deepseek-v4-flash
+      # api_base: https://api.deepseek.com
+      api_key: os.environ/DEEPSEEK_API_KEY
+      drop_params: true
+      additional_drop_params:
+        - "metadata.user_id"
+        - "user"
+
+  # ── OpenAI ───────────────────────────────────────────────────────
+  - model_name: gpt-5.5
+    litellm_params:
+      model: openai/gpt-5.5
+      api_key: os.environ/OPENAI_API_KEY
+      drop_params: true
+
+  - model_name: gpt-5.5-instant
+    litellm_params:
+      model: openai/gpt-5.5-instant
+      api_key: os.environ/OPENAI_API_KEY
+      drop_params: true
