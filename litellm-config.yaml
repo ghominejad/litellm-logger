@@ -1,6 +1,6 @@
 litellm_settings:
-  # Logging is OFF by default. Uncomment the next line to enable logging
-  # callbacks: custom_logger.proxy_logger
+  # Logging is ON by default. Comment out the next line to disable logging
+  callbacks: custom_logger.proxy_logger
 
 model_list:
   # ── DeepSeek (via api.deepseek.com/anthropic) ──────────────────────────────

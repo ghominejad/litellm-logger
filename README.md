@@ -1,11 +1,11 @@
 # litellm-logger
 
-A small, self-hosted [LiteLLM](https://github.com/BerriAI/litellm) proxy that sits between your LLM client (e.g. Claude Code) and providers like Anthropic, DeepSeek, and OpenAI. It lets you:
+A small, self-hosted [LiteLLM](https://github.com/BerriAI/litellm) proxy that sits between your LLM client (e.g. Claude Code) and providers like Anthropic, DeepSeek, and OpenAI — and can record everything it relays to local JSON. It lets you:
 
 1. **Switch the model** your client talks to without changing the client — point your app at `http://localhost:4000` once, then route to DeepSeek, GPT, or Anthropic behind the scenes.
-2. **Optionally log every request/response** to local JSON files for a full record of your conversations. Logging is **off by default** — uncomment one line in `litellm-config.yaml` to turn it on (see [Logs](#logs)).
+2. **Log every request/response** to local JSON files for a full record of your conversations. Logging is **on by default** — comment out one line in `litellm-config.yaml` to turn it off (see [Logs](#logs)).
 
-When logging is on, it de-duplicates the large `tools` payload across logs using a content-addressed registry, so files stay small and greppable.
+When logging is on, it **de-duplicates the large `tools` payload** across logs using a content-addressed registry — each unique tool schema is stored once and re-versioned only when it changes, so files stay small and greppable.
 
 ## Usage at a glance
 
@@ -180,14 +180,14 @@ volumes:
 
 ### Logs
 
-Logging is **off by default** — the proxy just routes traffic. To enable it, uncomment the callback line in `litellm-config.yaml`, then restart the proxy (`docker compose up -d`):
+Logging is **on by default** — every call the proxy relays is written to `./logs`. To disable it, comment out the callback line in `litellm-config.yaml`, then restart the proxy (`docker compose up -d`):
 
 ```yaml
 litellm_settings:
-  callbacks: custom_logger.proxy_logger   # uncomment to write logs to ./logs
+  callbacks: custom_logger.proxy_logger   # comment out to stop writing logs to ./logs
 ```
 
-Once enabled, calls are written to `./logs`:
+Calls are written to `./logs`:
 
 - Per-call logs: `logs/YYMMDD-HH/<time>_<call_id>.json` — `messages`, `system`, `response`, `model`, `tool_choice`, and a `tools_hash`.
 - Tools registry: `logs/tools/<sha256>.json` — each unique tools payload, stored once and referenced by hash. See [docs/decisions.md](docs/decisions.md) for the rationale.

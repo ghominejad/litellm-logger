@@ -22,8 +22,10 @@ function _litellm_loadenv --argument-names envfile
     end
 end
 
-# Repo root is the parent of this lib/ directory.
-set -g _litellm_dir (dirname (dirname (status --current-filename)))
+# Repo root is the parent of this lib/ directory. `path resolve` makes it an
+# absolute path, so `usemodel` keeps working no matter the current directory or
+# whether config.fish was sourced by a relative path.
+set -g _litellm_dir (path resolve (status --current-filename)/../..)
 
 # Load API keys from the root .env (the same file docker-compose reads),
 # so there's a single source of truth and no keys are hardcoded anywhere.
