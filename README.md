@@ -5,6 +5,17 @@ A small, self-hosted [LiteLLM](https://github.com/BerriAI/litellm) proxy that si
 1. **Switch the model** your client talks to without changing the client — point your app at `http://localhost:4000` once, then route to DeepSeek, GPT, or Anthropic behind the scenes.
 2. **Log every request/response** to local JSON files for a full record of your conversations. Logging is **on by default** — comment out one line in `litellm-config.yaml` to turn it off (see [Logs](#logs)).
 
+```
+┌─────────────┐      http://localhost:4000      ┌──────────────┐      ┌───────────┐
+│ Claude Code │ ──────────────────────────────▶ │ LiteLLM proxy │ ───▶ │ DeepSeek  │
+│ (or any app)│                                  │  + logger     │      │ OpenAI    │
+└─────────────┘                                  └──────────────┘      │ Anthropic │
+                                                        │              └───────────┘
+                                                        ▼
+                                                  ./logs/[YYMMDD-HH]/*.json
+                                                  ./Logs/Tools/*.json
+```
+
 When logging is on, it **de-duplicates the large `tools` payload** across logs using a content-addressed registry — each unique tool schema is stored once and re-versioned only when it changes, so files stay small and greppable.
 
 ## Usage at a glance
@@ -36,18 +47,8 @@ That's it — calls now flow through the proxy and land in `./logs`. Details bel
 
 ## How it works
 
-```
-┌─────────────┐      http://localhost:4000      ┌──────────────┐      ┌───────────┐
-│ Claude Code │ ──────────────────────────────▶ │ LiteLLM proxy │ ───▶ │ DeepSeek  │
-│ (or any app)│                                  │  + logger     │      │ OpenAI    │
-└─────────────┘                                  └──────────────┘      │ Anthropic │
-                                                        │              └───────────┘
-                                                        ▼
-                                                  ./logs/[YYMMDD-HH]/*.json
-                                                  ./Logs/Tools/*.json
-```
 
-There are **two sides** that are easy to confuse:
+There are **two sides** :
 
 | | What it is | Lives in | Needs |
 |---|---|---|---|
