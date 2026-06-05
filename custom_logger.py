@@ -36,8 +36,6 @@ class LocalDirectoryLogger(CustomLogger):
 
     def _write_log_sync(self, kwargs, response_obj):
         """Blocking I/O — only ever called inside a worker thread."""
-        if not LOGGING_ENABLED:
-            return
         try:
             now = datetime.now()
             log_dir = os.path.join(LOGS_DIR, now.strftime("%y%m%d-%H"))
